@@ -204,12 +204,33 @@ html.light body {
   color: #0f172a !important;
 }
 
+/* Light mode scrollbar */
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
 /* Hardcoded hex dark backgrounds fallback */
 html.light .bg-\[\#010204\],
 html.light .bg-\[\#020409\],
 html.light .bg-\[\#030712\],
-html.light .bg-\[\#02050e\] {
-  background-color: #f8fafc !important;
+html.light .bg-\[\#02050e\],
+html.light .bg-\[\#080c14\],
+html.light .bg-\[\#080c14\]\/95,
+html.light .bg-\[\#070b14\]\/98,
+html.light .bg-\[\#06080d\],
+html.light .bg-\[\#0b0f19\],
+html.light .bg-\[\#0b0f19\]\/90,
+html.light .bg-\[\#0b0f19\]\/95,
+html.light .bg-\[\#0d121f\],
+html.light .bg-\[\#0d1322\] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
 }
 
 /* Glass Panels */
@@ -243,6 +264,28 @@ html.light .bg-\[\#0b1120\]\/90 {
   background-color: rgba(255, 255, 255, 0.96) !important;
   border-color: rgba(226, 232, 240, 0.9) !important;
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Cyan & Brand Accents in Light Mode */
+html.light .text-cyan-400 {
+  color: #0284c7 !important;
+}
+html.light .text-cyan-300 {
+  color: #0369a1 !important;
+}
+html.light .border-cyan-500\/40,
+html.light .border-cyan-500\/30,
+html.light .border-cyan-500\/20,
+html.light .border-cyan-400\/50,
+html.light .border-cyan-400\/40 {
+  border-color: #bae6fd !important;
+}
+html.light .bg-cyan-950\/40,
+html.light .bg-cyan-950\/60,
+html.light .bg-cyan-950\/70,
+html.light .bg-cyan-950\/80 {
+  background-color: #f0f9ff !important;
+  color: #0369a1 !important;
 }
 
 /* Orbit Badges */
@@ -295,7 +338,7 @@ html.light .text-slate-300 {
 }
 
 html.light .text-slate-400 {
-  color: #64748b !important;
+  color: #475569 !important;
 }
 
 /* Input Fields */
@@ -311,12 +354,18 @@ html.light textarea::placeholder {
   color: #94a3b8 !important;
 }
 
-/* Always preserve White text on Gradient CTA buttons */
+/* Always preserve deep contrast dark text on bright Cyan/Sky CTA buttons */
+html.light a[class*="from-cyan"],
+html.light button[class*="from-cyan"],
+html.light a[class*="from-cyan"] span,
+html.light button[class*="from-cyan"] span,
+html.light a[class*="from-cyan"] svg,
+html.light button[class*="from-cyan"] svg,
 html.light a[class*="from-sky"],
 html.light button[class*="from-sky"],
 html.light a[class*="from-sky"] span,
 html.light button[class*="from-sky"] span,
 html.light a[class*="from-sky"] svg,
 html.light button[class*="from-sky"] svg {
-  color: #ffffff !important;
+  color: #090d16 !important;
 }

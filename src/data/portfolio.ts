@@ -18,7 +18,8 @@ export const personalInfo: PersonalInfo = {
   location: 'India',
   githubUrl: 'https://github.com',
   linkedinUrl: 'https://linkedin.com',
-  resumeUrl: '#resume'
+  resumeUrl: 'https://drive.google.com/uc?export=download&id=1-_N9X6ak55XNx6xy91RTNViyZwRIYzeB',
+  resumeViewUrl: 'https://drive.google.com/file/d/1-_N9X6ak55XNx6xy91RTNViyZwRIYzeB/view?usp=drive_link'
 };
 
 export const stats: StatItem[] = [

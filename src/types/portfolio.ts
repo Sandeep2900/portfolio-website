@@ -9,6 +9,7 @@ export interface PersonalInfo {
   githubUrl: string;
   linkedinUrl: string;
   resumeUrl: string;
+  resumeViewUrl?: string;
 }
 
 export interface StatItem {

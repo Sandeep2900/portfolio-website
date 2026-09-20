@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowRight, Sun, Moon, User } from 'lucide-react';
+import { Menu, X, ArrowRight, Sun, Moon, User, Sparkles } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useScene, type SectionId } from '../context/SceneContext';
 
 interface NavbarProps {
   activeSection: string;
@@ -12,6 +13,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { isDark, toggleTheme } = useTheme();
+  const { navigateToSection, isCinematic, toggle3DMode } = useScene();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,10 +48,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    const id = href.replace('#', '') as SectionId;
+    navigateToSection(id);
   };
 
   return (
@@ -57,9 +57,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
           ? isDark
-            ? 'py-3 bg-[#06080d]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.7)]'
-            : 'py-3 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 shadow-[0_4px_25px_rgba(0,0,0,0.06)]'
-          : 'py-5 bg-transparent'
+            ? 'py-2.5 bg-[#06080d]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.7)]'
+            : 'py-2.5 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 shadow-[0_4px_25px_rgba(0,0,0,0.06)]'
+          : 'py-3 sm:py-3.5 bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -72,7 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
           }`}
         >
           <span>Sandeep</span>
-          <span className="text-cyan-400 text-3xl font-extrabold leading-none">.</span>
+          <span className={`text-3xl font-extrabold leading-none ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>.</span>
         </a>
 
         {/* Desktop Navigation Links Pill Container */}
@@ -113,8 +113,33 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
           })}
         </nav>
 
-        {/* Right Action: Theme Switcher + CTA Button */}
-        <div className="hidden sm:flex items-center gap-3">
+        {/* Right Action: 3D Mode Toggle + Theme Switcher + CTA Button */}
+        <div className="hidden sm:flex items-center gap-2.5">
+          {/* 3D Immersion Mode Switcher */}
+          <button
+            type="button"
+            onClick={toggle3DMode}
+            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-[11px] font-mono font-bold transition-all cursor-pointer select-none active:scale-95 ${
+              isCinematic
+                ? isDark
+                  ? 'bg-cyan-950/70 border-cyan-400/60 text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.35)]'
+                  : 'bg-cyan-100/90 border-cyan-400 text-cyan-800 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                : isDark
+                ? 'bg-[#0b0f19] border-white/10 text-slate-400 hover:text-slate-200 hover:border-white/20'
+                : 'bg-slate-100 border-slate-200 text-slate-600 hover:text-slate-900'
+            }`}
+            title={isCinematic ? 'Click to switch to 3D Lite Mode' : 'Click to enable 3D Cinematic Mode'}
+            aria-label="Toggle 3D Immersion Mode"
+          >
+            <Sparkles className={`w-3.5 h-3.5 ${isCinematic ? 'text-cyan-400 animate-pulse' : 'text-slate-400'}`} />
+            <span>3D {isCinematic ? 'CINEMATIC' : 'LITE'}</span>
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isCinematic ? 'bg-cyan-400 shadow-[0_0_8px_#00f0ff] animate-ping' : 'bg-slate-500'
+              }`}
+            />
+          </button>
+
           {/* Sleek Theme Toggle Button */}
           <button
             type="button"
@@ -145,13 +170,30 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
           </a>
 
           {/* Profile / Status avatar indicator */}
-          <div className="w-8 h-8 rounded-full bg-slate-900 border border-white/10 flex items-center justify-center text-slate-300">
-            <User className="w-4 h-4 text-cyan-400" />
+          <div className={`w-8 h-8 rounded-full border flex items-center justify-center ${
+            isDark ? 'bg-slate-900 border-white/10 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-600 shadow-sm'
+          }`}>
+            <User className={`w-4 h-4 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />
           </div>
         </div>
 
         {/* Mobile Menu Actions */}
         <div className="flex lg:hidden items-center gap-2.5">
+          {/* Mobile 3D Toggle */}
+          <button
+            type="button"
+            onClick={toggle3DMode}
+            className={`px-2.5 py-1.5 rounded-lg border text-[10px] font-mono font-bold transition-all cursor-pointer select-none active:scale-95 flex items-center gap-1.5 ${
+              isCinematic
+                ? 'bg-cyan-950/80 border-cyan-400/60 text-cyan-300'
+                : 'bg-slate-900 border-white/15 text-slate-400'
+            }`}
+            aria-label="Toggle 3D Immersion Mode"
+          >
+            <Sparkles className="w-3 h-3 text-cyan-400" />
+            <span>3D {isCinematic ? 'ON' : 'LITE'}</span>
+          </button>
+
           <button
             type="button"
             onClick={toggleTheme}
@@ -230,6 +272,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
                     isDark ? 'border-white/10' : 'border-slate-200'
                   }`}
                 >
+                  <button
+                    type="button"
+                    onClick={toggle3DMode}
+                    className="flex items-center justify-between w-full px-4 py-3 text-sm font-mono font-bold rounded-xl border border-cyan-500/30 bg-cyan-950/40 text-cyan-300"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-cyan-400" />
+                      <span>3D Mode: {isCinematic ? 'CINEMATIC' : 'LITE'}</span>
+                    </span>
+                    <span className="text-xs text-cyan-400 underline">Tap to Switch</span>
+                  </button>
+
                   <a
                     href="#contact"
                     onClick={(e) => handleNavClick(e, '#contact')}

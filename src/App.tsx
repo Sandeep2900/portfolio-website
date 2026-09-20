@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from './context/ThemeContext';
+import { SceneProvider, useScene } from './context/SceneContext';
+import { SceneContainer } from './components/3d/SceneContainer';
 import { CustomCursor } from './components/CustomCursor';
-import { FloatingBackground } from './components/FloatingBackground';
-import { ParticleBackground } from './components/ParticleBackground';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
@@ -13,9 +13,10 @@ import { Education } from './components/Education';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 
-export const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const { isDark } = useTheme();
+  const { setScrollProgress } = useScene();
 
   useEffect(() => {
     const sections = [
@@ -49,8 +50,20 @@ export const App: React.FC = () => {
       }
     });
 
-    return () => observer.disconnect();
-  }, []);
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress(Math.min(Math.max(window.scrollY / totalScroll, 0), 1));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [setScrollProgress]);
 
   return (
     <div
@@ -61,14 +74,13 @@ export const App: React.FC = () => {
       {/* Interactive Cybernetic Custom Cursor */}
       <CustomCursor />
 
-      {/* Background Animated Layer */}
-      <FloatingBackground />
-      <ParticleBackground />
+      {/* Persistent 3D WebGL Atmospheric Background Layer */}
+      <SceneContainer />
 
-      {/* Navigation */}
+      {/* Fixed Navigation Bar */}
       <Navbar activeSection={activeSection} />
 
-      {/* Main Content Sections matching exact reference hierarchy */}
+      {/* Scrollable HTML Content — proper responsive sections */}
       <main className="relative z-20">
         <Hero />
         <About />
@@ -82,6 +94,14 @@ export const App: React.FC = () => {
       {/* Footer */}
       <Footer />
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <SceneProvider>
+      <AppContent />
+    </SceneProvider>
   );
 };
 

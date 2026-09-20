@@ -1,19 +1,24 @@
 import React, { useEffect, useRef } from 'react';
+import { useTheme } from '../context/ThemeContext';
 
-interface MicroBubble {
+interface ShiningStar {
   x: number;
   y: number;
   radius: number;
-  speed: number;
-  wobbleSpeed: number;
-  wobbleVal: number;
-  wobbleAmp: number;
   baseAlpha: number;
-  color: string;
+  twinklePhase: number;
+  twinkleSpeed: number;
+  twinkleAmp: number;
+  vx: number;
+  vy: number;
+  hasFlare: boolean;
+  flareSize: number;
+  colorType: 'white' | 'cyan' | 'blue';
 }
 
 export const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -36,75 +41,104 @@ export const ParticleBackground: React.FC = () => {
 
     window.addEventListener('resize', handleResize);
 
-    const bubbleCount = width < 768 ? 22 : 48;
-    const bubbles: MicroBubble[] = [];
+    // Number of small shining stars
+    const starCount = width < 768 ? 55 : 120;
+    const stars: ShiningStar[] = [];
 
-    const colors = [
-      'rgba(56, 189, 248, ', // electric blue
-      'rgba(6, 182, 212, ', // neon cyan
-      'rgba(168, 85, 247, ', // purple
-      'rgba(129, 140, 248, ', // indigo
-      'rgba(16, 185, 129, ' // emerald
+    const colorTypes: ('white' | 'cyan' | 'blue')[] = [
+      'white',
+      'white',
+      'cyan',
+      'cyan',
+      'blue',
     ];
 
-    for (let i = 0; i < bubbleCount; i++) {
-      const baseAlpha = Math.random() * 0.35 + 0.15;
-      bubbles.push({
+    for (let i = 0; i < starCount; i++) {
+      const hasFlare = Math.random() > 0.72; // ~28% of stars have cross-diffraction flare
+      stars.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        radius: Math.random() * 4 + 2, // 2px to 6px micro bubbles
-        speed: Math.random() * 0.4 + 0.2, // slow upward buoyant rise
-        wobbleSpeed: Math.random() * 0.02 + 0.01,
-        wobbleVal: Math.random() * Math.PI * 2,
-        wobbleAmp: Math.random() * 0.5 + 0.25,
-        baseAlpha,
-        color: colors[Math.floor(Math.random() * colors.length)]
+        // Small and delicate: 0.8px to 1.8px
+        radius: Math.random() * 1.0 + 0.75,
+        baseAlpha: Math.random() * 0.35 + 0.35,
+        twinklePhase: Math.random() * Math.PI * 2,
+        twinkleSpeed: Math.random() * 0.055 + 0.025,
+        twinkleAmp: Math.random() * 0.35 + 0.25,
+        // Noticeably faster, smooth celestial drifting
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: -Math.random() * 0.55 - 0.25,
+        hasFlare,
+        flareSize: Math.random() * 3.5 + 2.5,
+        colorType: colorTypes[Math.floor(Math.random() * colorTypes.length)],
       });
     }
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      for (let i = 0; i < bubbles.length; i++) {
-        const b = bubbles[i];
-        b.y -= b.speed;
-        b.wobbleVal += b.wobbleSpeed;
-        b.x += Math.sin(b.wobbleVal) * b.wobbleAmp;
+      for (let i = 0; i < stars.length; i++) {
+        const star = stars[i];
 
-        // Wrap around top to bottom
-        if (b.y < -20) {
-          b.y = height + 20;
-          b.x = Math.random() * width;
+        // Subtle position drift
+        star.x += star.vx;
+        star.y += star.vy;
+        star.twinklePhase += star.twinkleSpeed;
+
+        // Wrap around viewport edges
+        if (star.y < -10) {
+          star.y = height + 10;
+          star.x = Math.random() * width;
         }
-        if (b.x < -20) b.x = width + 20;
-        if (b.x > width + 20) b.x = -20;
+        if (star.x < -10) star.x = width + 10;
+        if (star.x > width + 10) star.x = -10;
 
-        const currentAlpha = b.baseAlpha + Math.sin(b.wobbleVal * 1.5) * 0.1;
-        const safeAlpha = Math.max(0.1, Math.min(0.65, currentAlpha));
+        // Compute twinkling alpha
+        const rawAlpha = star.baseAlpha + Math.sin(star.twinklePhase) * star.twinkleAmp;
+        const currentAlpha = Math.max(0.08, Math.min(0.98, rawAlpha));
 
-        // Draw bubble body (translucent sphere)
+        let colorRgb = '255, 255, 255';
+        if (star.colorType === 'cyan') {
+          colorRgb = '56, 189, 248';
+        } else if (star.colorType === 'blue') {
+          colorRgb = '129, 140, 248';
+        }
+
+        if (!isDark) {
+          // In light mode, stars appear as sparkling soft cyan/slate crystals
+          colorRgb = star.colorType === 'white' ? '71, 85, 105' : '14, 165, 233';
+        }
+
+        // 1. Soft glowing outer halo for shining stars
+        if (currentAlpha > 0.45) {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius * 2.8, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${colorRgb}, ${currentAlpha * (isDark ? 0.22 : 0.14)})`;
+          ctx.fill();
+        }
+
+        // 2. Star Core
         ctx.beginPath();
-        ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${b.color}${safeAlpha * 0.25})`;
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${colorRgb}, ${currentAlpha})`;
         ctx.fill();
 
-        // Draw glowing outer rim
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = `${b.color}${safeAlpha * 0.8})`;
-        ctx.stroke();
+        // 3. Delicate 4-point shining sparkle flare
+        if (star.hasFlare && currentAlpha > 0.58) {
+          const flareProgress = (currentAlpha - 0.58) / 0.4;
+          const flareLen = star.flareSize * flareProgress;
+          const flareAlpha = currentAlpha * 0.7;
 
-        // Draw tiny specular highlight reflection (3D glass bubble look)
-        if (b.radius > 2.5) {
+          ctx.strokeStyle = `rgba(${isDark ? '255, 255, 255' : colorRgb}, ${flareAlpha})`;
+          ctx.lineWidth = 0.65;
+
           ctx.beginPath();
-          ctx.arc(
-            b.x - b.radius * 0.3,
-            b.y - b.radius * 0.3,
-            b.radius * 0.25,
-            0,
-            Math.PI * 2
-          );
-          ctx.fillStyle = `rgba(255, 255, 255, ${safeAlpha * 0.85})`;
-          ctx.fill();
+          // Horizontal spike
+          ctx.moveTo(star.x - flareLen, star.y);
+          ctx.lineTo(star.x + flareLen, star.y);
+          // Vertical spike
+          ctx.moveTo(star.x, star.y - flareLen);
+          ctx.lineTo(star.x, star.y + flareLen);
+          ctx.stroke();
         }
       }
 
@@ -117,7 +151,7 @@ export const ParticleBackground: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [isDark]);
 
   return (
     <canvas

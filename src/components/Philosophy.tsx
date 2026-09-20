@@ -24,7 +24,7 @@ export const Philosophy: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {philosophies.map((item, idx) => {
-            const Icon = iconMap[item.iconName] || Layers;
+            const IconComponent: any = iconMap[item.iconName] || Layers;
 
             return (
               <motion.div
@@ -40,7 +40,7 @@ export const Philosophy: React.FC = () => {
 
                 <div>
                   <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-6 group-hover:scale-110 group-hover:border-sky-400/40 transition-transform">
-                    <Icon className="w-6 h-6" />
+                    <IconComponent className="w-6 h-6" />
                   </div>
 
                   <h3 className="text-xl font-bold text-white mb-3">
