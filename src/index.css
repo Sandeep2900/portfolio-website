@@ -1,0 +1,322 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --color-brand-cyan: #06b6d4;
+  --color-brand-blue: #38bdf8;
+  --color-brand-indigo: #6366f1;
+  --color-brand-violet: #8b5cf6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #010206;
+}
+::-webkit-scrollbar-thumb {
+  background: #111827;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
+}
+
+/* Futuristic grid patterns */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Floating Glass Bubbles */
+.bubble-cyan {
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(6, 182, 212, 0.22) 25%,
+    rgba(56, 189, 248, 0.12) 55%,
+    rgba(2, 6, 23, 0.05) 100%
+  );
+  border: 1px solid rgba(6, 182, 212, 0.45);
+  box-shadow: 
+    inset 0 0 20px rgba(6, 182, 212, 0.3),
+    inset -4px -4px 15px rgba(56, 189, 248, 0.3),
+    0 0 30px rgba(6, 182, 212, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.bubble-blue {
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(56, 189, 248, 0.22) 25%,
+    rgba(99, 102, 241, 0.12) 55%,
+    rgba(2, 6, 23, 0.05) 100%
+  );
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 
+    inset 0 0 20px rgba(56, 189, 248, 0.3),
+    inset -4px -4px 15px rgba(99, 102, 241, 0.3),
+    0 0 30px rgba(56, 189, 248, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.bubble-purple {
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(168, 85, 247, 0.22) 25%,
+    rgba(129, 140, 248, 0.12) 55%,
+    rgba(2, 6, 23, 0.05) 100%
+  );
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  box-shadow: 
+    inset 0 0 20px rgba(168, 85, 247, 0.3),
+    inset -4px -4px 15px rgba(56, 189, 248, 0.3),
+    0 0 30px rgba(168, 85, 247, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.bubble-emerald {
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(16, 185, 129, 0.2) 25%,
+    rgba(6, 182, 212, 0.1) 55%,
+    rgba(2, 6, 23, 0.05) 100%
+  );
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  box-shadow: 
+    inset 0 0 20px rgba(16, 185, 129, 0.25),
+    inset -4px -4px 15px rgba(6, 182, 212, 0.25),
+    0 0 30px rgba(16, 185, 129, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Glassmorphism primitives */
+.glass-panel {
+  background: rgba(8, 12, 22, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-panel-subtle {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-button {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+/* Subtle glow gradients */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #ffffff 20%, #93c5fd 60%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #38bdf8 0%, #06b6d4 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, #a78bfa 0%, #38bdf8 50%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animations */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.05);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 8s ease-in-out infinite;
+}
+
+/* Accessibility / Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Light Mode Styles */
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Hardcoded hex dark backgrounds fallback */
+html.light .bg-\[\#010204\],
+html.light .bg-\[\#020409\],
+html.light .bg-\[\#030712\],
+html.light .bg-\[\#02050e\] {
+  background-color: #f8fafc !important;
+}
+
+/* Glass Panels */
+html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(241, 245, 249, 0.6) !important;
+  color: #1e293b !important;
+}
+
+html.light .glass-panel-subtle {
+  background: rgba(248, 250, 252, 0.85) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  color: #334155 !important;
+}
+
+/* Card & Surface Containers */
+html.light .bg-slate-900\/40,
+html.light .bg-slate-900\/60,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-950\/40,
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/70,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/90,
+html.light .bg-\[\#070b16\]\/95,
+html.light .bg-\[\#080d1a\]\/95,
+html.light .bg-\[\#080d1a\]\/98,
+html.light .bg-\[\#0b1120\]\/90 {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Orbit Badges */
+html.light .bg-\[\#0b1528\]\/90,
+html.light .bg-\[\#0f1424\]\/90,
+html.light .bg-\[\#0c1220\]\/90,
+html.light .bg-\[\#0b1526\]\/90 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.12) !important;
+}
+
+/* Borders */
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/\[0\.08\],
+html.light .border-white\/\[0\.06\],
+html.light .border-white\/\[0\.04\] {
+  border-color: rgba(226, 232, 240, 0.9) !important;
+}
+
+/* Background Opacities */
+html.light .bg-white\/\[0\.02\],
+html.light .bg-white\/\[0\.03\],
+html.light .bg-white\/\[0\.04\],
+html.light .bg-white\/\[0\.05\] {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Text Hierarchy */
+html.light h1:not([class*="bg-clip-text"]),
+html.light h2:not([class*="bg-clip-text"]),
+html.light h3:not([class*="bg-clip-text"]),
+html.light h4:not([class*="bg-clip-text"]) {
+  color: #0f172a !important;
+}
+
+html.light .text-slate-100 {
+  color: #0f172a !important;
+}
+
+html.light .text-slate-200 {
+  color: #1e293b !important;
+}
+
+html.light .text-slate-300 {
+  color: #334155 !important;
+}
+
+html.light .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Input Fields */
+html.light input,
+html.light textarea {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Always preserve White text on Gradient CTA buttons */
+html.light a[class*="from-sky"],
+html.light button[class*="from-sky"],
+html.light a[class*="from-sky"] span,
+html.light button[class*="from-sky"] span,
+html.light a[class*="from-sky"] svg,
+html.light button[class*="from-sky"] svg {
+  color: #ffffff !important;
+}
